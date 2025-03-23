@@ -1,0 +1,68 @@
+graph TD
+    A[Symmetry Blackbox] --> B[Public Site]
+    A --> C[Customer Console]
+    A --> D[Administration Console]
+
+    %% Public Site Structure
+    B --> B1[Home]
+    B --> B2[About]
+    B --> B3[Pricing]
+    B --> B4[Contact]
+    B --> B5[Customer Login]
+    B --> B6[Registration]
+    B --> B7[Privacy Policy]
+    B --> B8[Terms & Conditions]
+
+    %% Home Page Components
+    B1 --> B1a[Hero Slider]
+    B1 --> B1b[Service Introduction]
+    B1 --> B1c[Call to Action]
+    
+    %% About Page Components
+    B2 --> B2a[Service Details]
+    B2 --> B2b[Use Cases]
+    B2 --> B2c[Call to action]
+
+    %% Pricing Page Components
+    B3 --> B3a[Subscription Plans]
+    B3 --> B3b[Trial Option]
+    B3 --> B3c[Call to action]
+
+    %% Contact Page Components
+    B4 --> B4a[Contact Form]
+    B4 --> B4b[Contact Information]
+
+    %% Privacy Policy
+
+    %% Terms & Conditions
+    
+    %% Customer Console Structure
+    C --> C1[Dashboard]
+    C --> C2[Billing]
+    C --> C3[Targets]
+    C --> C4[User Settings]
+
+    %% Dashboard Components
+    C1 --> C1a[Target Details]
+    C1 --> C1b[Execution Results Summary]
+    C1 --> C1c[Reports]
+    C1 --> C1d[Reconnaissance Executions]
+    
+    %% Billing Components
+    C2 --> C2a[Subscription Details]
+    C2 --> C2b[Invoices]
+    C2 --> C2c[Usage Statistics]
+    
+    %% Targets
+    C3 --> C3a[Organization Information]
+    C3 --> C3b[Affiliation Verification]
+    
+    %% User Settings
+    C4 --> C4a[Personal Details]
+    C4 --> C4b[Payment Information]
+    C4 --> C4c[User Management]
+    
+    %% Admin Section
+    D --> D1[Administration Login]
+    D --> D2[Customer Management]
+    D --> D3[Job Execution Management]

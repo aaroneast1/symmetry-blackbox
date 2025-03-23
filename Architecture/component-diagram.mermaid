@@ -1,0 +1,78 @@
+graph TD
+    %% Frontend Components
+    subgraph Frontend["Frontend (Next.js in Container)"]
+        F1[Public Pages]
+        F2[Authentication UI]
+        F3[Customer Console UI]
+        F4[Admin Console UI]
+    end
+    
+    %% Backend Services
+    subgraph Backend["Backend Services (Node.js in Containers)"]
+        B1[Authentication Service]
+        B2[User Management Service]
+        B3[Reconnaissance Job Service]
+        B4[Reporting Service]
+        B5[Billing Service]
+    end
+    
+    %% Data Storage
+    subgraph Database["PostgreSQL on Fly.io"]
+        D1[Users]
+        D2[Organizations]
+        D3[Targets]
+        D4[Reconnaissance Jobs]
+        D5[Execution Results]
+        D6[Billing Information]
+        D7[Keycloak Schema]
+    end
+    
+    %% Keycloak Identity Provider
+    subgraph Keycloak["Keycloak in Container"]
+        K1[OAuth Providers]
+        K2[User Authentication]
+        K3[Authorization]
+        K4[User Federation]
+        K5[Admin Console]
+    end
+    
+    %% Logging System
+    subgraph Logging["Logging System (Vector + Loki)"]
+        L1[Log Collection]
+        L2[Log Storage]
+        L3[Log Querying]
+    end
+    
+    %% Connections between components
+    F1 --> B1
+    F2 --> Keycloak
+    F3 --> B1
+    F3 --> B2
+    F3 --> B3
+    F3 --> B4
+    F3 --> B5
+    F4 --> B2
+    F4 --> B3
+    
+    B1 <--> Keycloak
+    Keycloak <--> D7
+    B1 <--> D1
+    B2 <--> D1
+    B2 <--> D2
+    B3 <--> D3
+    B3 <--> D4
+    B4 <--> D4
+    B4 <--> D5
+    B5 <--> D6
+    
+    Backend --> Logging
+    
+    %% External System
+    subgraph ReconSystem["Symmetry Blackbox Engine"]
+        R1[Reconnaissance Engine]
+        R2[Target Discovery]
+        R3[Results Processing]
+    end
+    
+    B3 <--> ReconSystem
+    ReconSystem --> D5
