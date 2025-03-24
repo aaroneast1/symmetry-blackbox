@@ -1,34 +1,42 @@
 graph TD
-    %% Frontend Components
-    subgraph Frontend["Frontend (Next.js in Container)"]
-        F1[Public Pages]
-        F2[Authentication UI]
-        F3[Customer Console UI]
-        F4[Admin Console UI]
+    %% Public facing components (Next.js in container)
+    subgraph Frontend["Public endpoints"]
+        F1[Homepage]
+        F2[Login]
+        F3[Registration]
+        F4[Customer Console]
+        F5[Admin Login]
+        F6[Admin Console]
     end
     
-    %% Backend Services
-    subgraph Backend["Backend Services (Node.js in Containers)"]
-        B1[Authentication Service]
-        B2[User Management Service]
-        B3[Reconnaissance Job Service]
+    %% API Services (Python FastAPI in Container)
+    subgraph API["API Services"]
+        B1[API Gateway]
+        B2[User Service]
+        B3[Job Service]
         B4[Reporting Service]
         B5[Billing Service]
+        B6[Target Service]
     end
     
-    %% Data Storage
-    subgraph Database["PostgreSQL on Fly.io"]
+    %% Relational Data Storage (Postgres managed service on Fly.io)
+    subgraph Relational_DB["PostgreSQL"]
         D1[Users]
-        D2[Organizations]
-        D3[Targets]
-        D4[Reconnaissance Jobs]
-        D5[Execution Results]
-        D6[Billing Information]
-        D7[Keycloak Schema]
+        D2[Targets]
+        D3[Jobs]
+        D4[Reports]
+        D5[Billing]
+        D6[Keycloak Schema]
     end
+
+    %% Timeseries Data Storage (QuestDB deployed in a container)
+    subgraph Timeseries_DB["QuestDB"]
+        T1[Job logs]
+        T2[Job results]
+    end   
     
     %% Keycloak Identity Provider
-    subgraph Keycloak["Keycloak in Container"]
+    subgraph Keycloak["Keycloak Auth in Container"]
         K1[OAuth Providers]
         K2[User Authentication]
         K3[Authorization]
@@ -36,43 +44,64 @@ graph TD
         K5[Admin Console]
     end
     
-    %% Logging System
-    subgraph Logging["Logging System (Vector + Loki)"]
-        L1[Log Collection]
-        L2[Log Storage]
-        L3[Log Querying]
+    %% AI Services
+    subgraph AI["AI Services"]
+        AI1[Agentic AI nuclei]
+        AI2[Agentic AI amass]
+        AI3[Agentic AI nmap]
+        AI4[Agentic AI zap]
+        AI5[Agentic AI Report]
     end
     
-    %% Connections between components
+    %% Connections Frontend to Keycloak   
+    F2 --> K2
+    F4 --> K3
+    F5 --> K2
+    F6 --> K3
+    F6 --> K5
+
+    %% Connections Frontends to API Gateway
     F1 --> B1
-    F2 --> Keycloak
     F3 --> B1
-    F3 --> B2
-    F3 --> B3
-    F3 --> B4
-    F3 --> B5
-    F4 --> B2
-    F4 --> B3
+    F4 --> B1
+    F5 --> B1
+    F6 --> B1
     
-    B1 <--> Keycloak
-    Keycloak <--> D7
-    B1 <--> D1
-    B2 <--> D1
-    B2 <--> D2
-    B3 <--> D3
-    B3 <--> D4
-    B4 <--> D4
-    B4 <--> D5
-    B5 <--> D6
-    
-    Backend --> Logging
-    
-    %% External System
-    subgraph ReconSystem["Symmetry Blackbox Engine"]
-        R1[Reconnaissance Engine]
-        R2[Target Discovery]
-        R3[Results Processing]
-    end
-    
-    B3 <--> ReconSystem
-    ReconSystem --> D5
+    %% Connections API Gateway to APIs
+    B1 --> B2
+    B1 --> B3
+    B1 --> B4
+    B1 --> B5
+
+    %% Connections Job Service to Agentic AIs
+    B3 --> AI1 
+    B3 --> AI2 
+    B3 --> AI3 
+    B3 --> AI4 
+    B3 --> AI5 
+
+    %% Connections Services to DBs
+    AI1 --> T1
+    AI1 --> T2
+    AI2 --> T1
+    AI2 --> T2
+    AI3 --> T1
+    AI3 --> T2
+    AI4 --> T1
+    AI4 --> T2
+    AI5 --> T1
+    AI5 --> T2
+
+    %% Connections APIs to Relation DB
+    B2 --> D1
+    B3 --> D3
+    B4 --> D4
+    B5 --> D5
+    B6 --> D2
+    Keycloak --> D6
+
+    %% Style
+    style Frontend fill:#fff,stroke:#000,stroke-width:2px
+    style API fill:#E3F7E2,stroke:#000,stroke-width:2px
+    style Keycloak fill:#FFD3D1,stroke:#000,stroke-width:2px
+    style AI fill:#FFE6CC,stroke:#000,stroke-width:2px
